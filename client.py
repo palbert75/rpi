@@ -26,7 +26,7 @@ while True:
     # Read data from the TCP server and close the connection
     received = s.recv(1024)
     print("Got PWM: ", received.decode())
-    time.sleep(1)
+    time.sleep(15)
 
 s.close()
 

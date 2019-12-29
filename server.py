@@ -1,4 +1,13 @@
 import socket
+import time
+from firebase import firebase
+
+# create firebase client and connect to db
+
+
+# we choosen to use TCP stream socket
+
+
 
 print ("Prepare socket listener")
 TCP_IP = '192.168.1.117'  #accept connection on all ip address of the machine
@@ -30,7 +39,7 @@ while True:
     # for kernel interrupt before go to the next instruction
 
     # When a client arrive
-    print ('Connection address:', addr)  
+    print ('Accecpted client from address:', addr)  
 
     # Start reading data
     while 1:
@@ -39,10 +48,25 @@ while True:
                     print ("No other data. Socket closed")
                     break
             else:
-                    print (data)  # print the data in the console
                     temp = data.decode()
 
+                    stamp =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+                    pwm = 0.0
+
                     if float(temp) >= 50:
-                        conn.sendall("13".encode())
-                    else:
-                        conn.sendall("0".encode())
+                        pwm = 2.0 * (float(temp) -50) 
+                        
+                    print("{} : Got {} C from {} -> PWM: {}))".format(stamp, float(temp), addr, pwm))         
+
+                    conn.sendall(str(pwm).encode())
+                    
+                    data = { 
+                                'Device' : 'MyPI',
+                                'Temp' : float(temp),
+                                'PWM' : pwm,
+                                'Stamp' : stamp
+                        }
+
+                    result = firebase.post('/TempValues/', data) 
+                    print("{} : Record stored in firebase db {}".format(stamp, result))
