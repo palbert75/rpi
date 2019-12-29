@@ -4,7 +4,6 @@ from firebase import firebase
 
 # create firebase client and connect to db
 
-
 # we choosen to use TCP stream socket
 
 
@@ -18,7 +17,7 @@ BUFFER_SIZE = 1024 # we can receive at max 1024 bytes at time
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # we inform the SO to bypass TIME_WAIT 
-# this mean that we can restart this program without waiting for
+# this mean that we can restart this program without waiting fordispla
 # TIME_WAIT elapsing. 
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -68,5 +67,6 @@ while True:
                                 'Stamp' : stamp
                         }
 
-                    result = firebase.post('/TempValues/', data) 
+                    result = firebase.put('/last', 'value', data) 
+                    result = firebase.post('/values/', data) 
                     print("{} : Record stored in firebase db {}".format(stamp, result))
