@@ -1,11 +1,10 @@
 import socket
 import time
-import secret
 
 
 print ("Prepare socket listener")
 TCP_IP = '192.168.1.117'  #accept connection on all ip address of the machine
-TCP_PORT = 9999 #accept connection only on port 1978
+TCP_PORT = 9998 #accept connection only on port 1978
 BUFFER_SIZE = 1024 # we can receive at max 1024 bytes at time
 
 # we choosen to use TCP stream socket
@@ -24,7 +23,6 @@ s.bind((TCP_IP, TCP_PORT))
 
 while True:
     print ("Wait for client on port {}".format(TCP_PORT))
-
     # Start the listener (wait for only 1 connection at time)
     s.listen(1)
 
@@ -43,26 +41,9 @@ while True:
                     print ("No other data. Socket closed")
                     break
             else:
-                    temp = data.decode()
+                    pwm = data.decode()
 
                     stamp =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-
-                    pwm = 0.0
-
-                    if float(temp) >= 50:
-                        pwm = 2.0 * (float(temp) -50) 
-                        
-                    print("{} : Got {} C from {} -> PWM: {}))".format(stamp, float(temp), addr, pwm))         
-
-                    conn.sendall("ACK".encode())
                     
-                    data = { 
-                                'Device' : 'MyPI',
-                                'Temp' : float(temp),
-                                'PWM' : pwm,
-                                'Stamp' : stamp
-                        }
-
-                    result = secret.firebase.put('/last', 'value', data) 
-                    result = secret.firebase.post('/values/', data) 
-                    print("{} : Record stored in firebase db {}".format(stamp, result))
+                    print("{} : Got PWM: {} from {}".format(stamp, float(pwm), addr))
+                    conn.sendall("ACK".encode())       

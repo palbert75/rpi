@@ -22,10 +22,11 @@ while True:
     temp = measure_temp()
 
     s.sendall(temp.encode())
+    print("Sent temperature {} C to server".format(float(temp)))
 
     # Read data from the TCP server and close the connection
     received = s.recv(1024)
-    print("Got PWM: ", received.decode())
+    print("Got from server: ", received.decode())
     time.sleep(15)
 
 s.close()
