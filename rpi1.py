@@ -3,6 +3,15 @@ import os
 import time
 import select
 import settings
+import RPi.GPIO as GPIO
+import time
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(38,GPIO.OUT)
+#GPIO.output(38,True)
+my_pwn = GPIO.PWM(38,100)
+my_pwn.start(0)
+
 
 def measure_temp():
         temp = os.popen("vcgencmd measure_temp").readline()
@@ -12,6 +21,7 @@ def measure_temp():
 
 def processPWM(pwm):
     print("Switch fan rotation to {} %".format(pwm))
+    my_pwn.ChangeDutyCycle(pwm)
 
 
 ws1host, ws1port = settings.ws1host, settings.ws1port
@@ -23,8 +33,6 @@ ws_s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # connection to hostname on the port.
 ws_s.connect((ws1host, ws1port))                               
    
-
-
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
