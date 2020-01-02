@@ -13,8 +13,8 @@ def calcPwm(temp):
         if temp >= 60:
             pwm = 100
         else:
-            y = (temp - 50) / 10
-            pwm = math.pow(100, y)
+            diff = (temp - 50) * 2
+            pwm = 80 + diff
 
     return pwm      
     

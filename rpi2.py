@@ -59,7 +59,7 @@ while True:
                     stamp =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                     conn.sendall("ACK".encode())
                     
-		if lastpwm != PWM: 
-                  	print("{} : Got temp {} calculated PWM: {} to {}".format(stamp, temp, PWM, rpi1host))
-                    	rp1_s.sendall(str(PWM).encode())
+                    if lastpwm != PWM: 
+                        print("{} : Got temp {} calculated PWM: {} to {}".format(stamp, temp, PWM, rpi1host))
+                        rp1_s.sendall(str(PWM).encode())
                         lastpwm = PWM
