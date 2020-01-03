@@ -14,7 +14,7 @@ rp1_s.connect((rpi1host, rpi1port))
 
 print ("Prepare socket listener")
 TCP_IP = settings.rpi2host   #accept connection on all ip address of the machine
-TCP_PORT = settings.rpi2port #accept connection only on port 1978
+TCP_PORT = settings.rpi2port #accept connection only on port
 BUFFER_SIZE = 1024 # we can receive at max 1024 bytes at time
 
 # we choosen to use TCP stream socket
@@ -30,6 +30,8 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 # unique id in the header!
 
 s.bind((TCP_IP, TCP_PORT))
+
+lastpwm=0.0
 
 while True:
     print ("Wait for client on port {}".format(TCP_PORT))
@@ -55,7 +57,10 @@ while True:
                     PWM = pwm.calcPwm(float(temp))
 
                     stamp =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-                    
-                    print("{} : Got temp {} calculated PWM: {} to {}".format(stamp, temp, PWM, rpi1host))
+                    print("{} : Got temp {} calculated PWM: {}".format(stamp, temp, PWM))
                     conn.sendall("ACK".encode())
-                    rp1_s.sendall(str(PWM).encode())
+                    
+                    if lastpwm != PWM: 
+                        print("{} : PWM changed from {} to {} sending to {}".format(stamp, lastpwm, PWM, rpi1host))
+                        rp1_s.sendall(str(PWM).encode())
+                        lastpwm = PWM
