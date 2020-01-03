@@ -20,9 +20,9 @@ while True:
     print("Retrieved temperature {} C from firebase".format(str(data['Temp'])))
 
     temp = data['Temp']
-    
+    stamp =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
     s.sendall(str(temp).encode())
-    print("Sent temp {} to server".format(temp))
+    print("{}: Sent temp {} to server {} (rpi2)".format(stamp, temp, rpi2host))
     
     # Read data from the TCP server and close the connection
     received = s.recv(1024)
