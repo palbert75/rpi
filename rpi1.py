@@ -76,6 +76,5 @@ while True:
                 s.close()
                 read_list.remove(s)
 
-    time.sleep(1)
 
 ws_s.close()
