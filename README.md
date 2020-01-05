@@ -4,8 +4,8 @@ Added temperature collect to client
 
 Requirmenets:
 
-pi:~/Motor  sudo pip3 install requests
-pi:~/Motor  sudo pip3 install python-firebase
+pi: ~/Motor  sudo pip3 install requests
+pi: ~/Motor  sudo pip3 install python-firebase
 
 Firebase python lib hack due to async 
 
